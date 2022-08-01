@@ -11,6 +11,9 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
         marginLeft: "0",
         flexWrap: "wrap",
+        height: "auto",
+        gap: "10px",
+        paddingBlock: "10px",
     },
 }));
 

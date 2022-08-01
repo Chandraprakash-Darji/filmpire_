@@ -8,40 +8,59 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetMoviesQuery } from "../../services/TMDB";
 import { MovieList } from "..";
+import { useAppSelector } from "../../app/hooks";
+import { styled } from "@mui/styles";
+
+const BoxWrapper = styled(Box)(({ theme }) => ({
+    display: "flex",
+    justifyContent: "center",
+    [theme.breakpoints.down("md")]: {
+        marginTop: "3rem",
+    },
+}));
 
 const Movies: React.FC = () => {
-    const { data, error, isFetching } = useGetMoviesQuery(1);
+    const [page, setPage] = useState(1);
+    const { genreIdOrCateogaryName, searchQuery } = useAppSelector(
+        (state) => state.currentGenreOrCateogory
+    );
+    const { data, error, isFetching } = useGetMoviesQuery({
+        genreIdOrCateogaryName,
+        page,
+        searchQuery,
+    });
+    const isMobile = useMediaQuery("(max-width:900px)");
 
     if (isFetching)
         return (
-            <Box display={"flex"} justifyContent="center">
+            <BoxWrapper>
                 <CircularProgress size={"4rem"} />
-            </Box>
+            </BoxWrapper>
         );
 
     if (!data?.results.length)
         return (
-            <Box display="flex" alignContent={"center"} mt="20px">
+            <BoxWrapper>
                 <Typography variant="h4">
                     No movies match that name.
                     <br />
                     Please Search for something else.
                 </Typography>
-            </Box>
+            </BoxWrapper>
         );
 
     if (error)
         return (
-            <Box display="flex" alignContent={"center"} mt="20px">
+            <BoxWrapper>
                 <Typography variant="h4">
                     Error Ocurred Try Again later...
                 </Typography>
-            </Box>
+            </BoxWrapper>
         );
     return (
-        <div>
+        <BoxWrapper>
             <MovieList movies={data} />
-        </div>
+        </BoxWrapper>
     );
 };
 

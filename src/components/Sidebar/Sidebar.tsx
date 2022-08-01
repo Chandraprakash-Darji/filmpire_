@@ -11,9 +11,11 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
 import { GenerImage, Image, ImageLink, Links } from "./styles";
-import { Link } from "react-router-dom";
 import { useGetGenresQuery } from "../../services/TMDB";
 import genreIcons from "../../assets/genres/index";
+import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { GenresType } from "../../types/Genres";
 const redLogo =
     "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
 const blueLogo =
@@ -21,7 +23,7 @@ const blueLogo =
 
 type cateograiesType = {
     label: string;
-    value: string;
+    value: "popular" | "top_rated" | "upcoming" | number;
 };
 
 const cateograies: cateograiesType[] = [
@@ -35,9 +37,12 @@ interface Props {
 }
 
 const Sidebar = ({ setMobileOpen }: Props) => {
+    const { genreIdOrCateogaryName } = useAppSelector(
+        (state) => state.currentGenreOrCateogory
+    );
     const { data, isFetching } = useGetGenresQuery();
     const theme = useTheme();
-    console.log(theme.palette.mode);
+    const dispatch = useAppDispatch();
     return (
         <>
             <ImageLink to="/" className="imageLink">
@@ -49,9 +54,14 @@ const Sidebar = ({ setMobileOpen }: Props) => {
             <Divider />
             <List>
                 <ListSubheader>Cateograies</ListSubheader>
-                {cateograies.map(({ label, value }) => (
+                {cateograies.map(({ label, value }: cateograiesType) => (
                     <Links key={value} to="/">
-                        <ListItem onClick={() => {}} button>
+                        <ListItem
+                            onClick={() =>
+                                dispatch(selectGenreOrCateogary(value))
+                            }
+                            button
+                        >
                             <ListItemIcon>
                                 <GenerImage
                                     src={genreIcons[label.toLowerCase()]}
@@ -71,9 +81,14 @@ const Sidebar = ({ setMobileOpen }: Props) => {
                         <CircularProgress size={"4rem"} />
                     </Box>
                 ) : (
-                    data?.genres.map(({ name, id }) => (
+                    data?.genres.map(({ name, id }:GenresType) => (
                         <Links key={id} to="/">
-                            <ListItem onClick={() => {}} button>
+                            <ListItem
+                                onClick={() =>
+                                    dispatch(selectGenreOrCateogary(id))
+                                }
+                                button
+                            >
                                 <ListItemIcon>
                                     <GenerImage
                                         src={genreIcons[name.toLowerCase()]}

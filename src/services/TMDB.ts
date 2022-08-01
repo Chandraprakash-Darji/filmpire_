@@ -2,11 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { GenresListType } from "../types/Genres";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
-const page = 1;
-
 import { MovieListType } from "../types/MoviesType";
 
-export const tmdbApi = createApi({
+export const tmdbApi: any = createApi({
     reducerPath: "tmdbApi",
     baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3" }),
     endpoints: (builder) => ({
@@ -16,8 +14,43 @@ export const tmdbApi = createApi({
         }),
 
         //* Get Mpovies by [Type]
-        getMovies: builder.query<MovieListType, number>({
-            query: (page) => `movie/popular?page=${page}&api_key=${tmdbApiKey}`,
+        getMovies: builder.query<
+            MovieListType,
+            {
+                genreIdOrCateogaryName:
+                    | number
+                    | "popular"
+                    | "top_rated"
+                    | "upcoming";
+                page: number;
+                searchQuery: string;
+            }
+        >({
+            query: ({ genreIdOrCateogaryName, page, searchQuery }) => {
+                //* get movies by Search
+                if (searchQuery) {
+                    return `search/movie?query=${searchQuery}&page=${page}&api_key=${tmdbApiKey}`;
+                }
+
+                //* get movies by cateogory
+                if (
+                    genreIdOrCateogaryName &&
+                    typeof genreIdOrCateogaryName === "string"
+                ) {
+                    return `movie/${genreIdOrCateogaryName}?page=${page}&api_key=${tmdbApiKey}`;
+                }
+
+                //* get movies by genres
+                if (
+                    genreIdOrCateogaryName &&
+                    typeof genreIdOrCateogaryName === "number"
+                ) {
+                    return `discover/movie?with_genres=${genreIdOrCateogaryName}&page=${page}&api_key=${tmdbApiKey}`;
+                }
+
+                //* Get popular Movies === DEFAULT
+                return `movie/popular?page=${page}&api_key=${tmdbApiKey}`;
+            },
         }),
     }),
 });

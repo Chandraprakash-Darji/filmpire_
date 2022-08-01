@@ -6,6 +6,7 @@ import NavBar from "./NavBar/NavBar";
 import Sidebar from "./Sidebar/Sidebar";
 import MovieList from "./MovieList/MovieList";
 import Movie from "./Movie/Movie";
+import Search from "./Search/Search";
 export {
     Actors,
     Movies,
@@ -15,4 +16,5 @@ export {
     Sidebar,
     MovieList,
     Movie,
+    Search,
 };

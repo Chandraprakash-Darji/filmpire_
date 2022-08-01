@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 export const MovieContainer = styled(Grid)(() => ({
     padding: "10px",
+    display: "flex",
+    justifyContent: "center",
 }));
 
 export const Title = styled(Typography)(({ theme }) => ({

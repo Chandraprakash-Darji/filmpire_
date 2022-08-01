@@ -22,12 +22,12 @@ import {
 } from "./styles";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Sidebar } from "..";
+import { Sidebar, Search } from "..";
 
 const NavBar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const theme = useTheme();
-    const isMobile = useMediaQuery("(max-width:800px)");
+    const isMobile = useMediaQuery("(max-width:900px)");
     const isAuthenticated = false;
     return (
         <>
@@ -54,7 +54,7 @@ const NavBar = () => {
                             <Brightness4 />
                         )}
                     </IconButton>
-                    {!isMobile && "Search ..."}
+                    {!isMobile && <Search />}
                     <div>
                         {!isAuthenticated ? (
                             <LinkButton color="inherit" onClick={() => {}}>
@@ -78,7 +78,7 @@ const NavBar = () => {
                             </Button>
                         )}
                     </div>
-                    {isMobile && "Search ..."}
+                    {isMobile && <Search />}
                 </StyledToolbar>
             </AppBar>
             <div>
