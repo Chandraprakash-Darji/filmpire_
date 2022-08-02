@@ -24,11 +24,12 @@ export const Poster = styled("img")(({ theme }) => ({
     borderRadius: "15px",
     boxShadow: "0.5em 1em 1em rgb(64,64,70)",
     width: "100%",
-    height: "auto",
+    height: "fit-content",
     marginBottom: "30px",
+    flexShrink: "0",
     [theme.breakpoints.down("md")]: {
         marginInline: "auto",
-        width: "60%",
+        width: "100%",
     },
     [theme.breakpoints.down("sm")]: {
         // margin: "0 auto",
