@@ -11,7 +11,7 @@ import { MovieList } from "..";
 import { useAppSelector } from "../../app/hooks";
 import { styled } from "@mui/styles";
 
-const BoxWrapper = styled(Box)(({ theme }) => ({
+export const BoxWrapper = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
     [theme.breakpoints.down("md")]: {

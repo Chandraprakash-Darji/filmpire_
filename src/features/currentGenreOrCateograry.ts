@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
 
 type IntialStateType = {
     genreIdOrCateogaryName: "popular" | "top_rated" | "upcoming" | number;

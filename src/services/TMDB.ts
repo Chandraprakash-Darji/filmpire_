@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GenresListType } from "../types/Genres";
+import { creditsType, GenresListType, SingleMovieType } from "../types";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
-import { MovieListType } from "../types/MoviesType";
+import { MoviesListType } from "../types";
 
 export const tmdbApi: any = createApi({
     reducerPath: "tmdbApi",
@@ -15,7 +15,7 @@ export const tmdbApi: any = createApi({
 
         //* Get Mpovies by [Type]
         getMovies: builder.query<
-            MovieListType,
+            MoviesListType,
             {
                 genreIdOrCateogaryName:
                     | number
@@ -52,7 +52,20 @@ export const tmdbApi: any = createApi({
                 return `movie/popular?page=${page}&api_key=${tmdbApiKey}`;
             },
         }),
+        //* Get Movie Details
+        getMovie: builder.query<SingleMovieType, number>({
+            query: (id) =>
+                `/movie/${id}?append_o_response=vidoes,credits&api_key=${tmdbApiKey}`,
+        }),
+        getMovieCast: builder.query<creditsType, number>({
+            query: (id) => `/movie/${id}/credits?api_key=${tmdbApiKey}`,
+        }),
     }),
 });
 
-export const { useGetMoviesQuery, useGetGenresQuery } = tmdbApi;
+export const {
+    useGetMoviesQuery,
+    useGetGenresQuery,
+    useGetMovieQuery,
+    useGetMovieCastQuery,
+} = tmdbApi;

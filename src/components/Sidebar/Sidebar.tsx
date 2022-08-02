@@ -15,7 +15,7 @@ import { useGetGenresQuery } from "../../services/TMDB";
 import genreIcons from "../../assets/genres/index";
 import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { GenresType } from "../../types/Genres";
+import { GenresType } from "../../types";
 const redLogo =
     "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
 const blueLogo =
@@ -81,7 +81,7 @@ const Sidebar = ({ setMobileOpen }: Props) => {
                         <CircularProgress size={"4rem"} />
                     </Box>
                 ) : (
-                    data?.genres.map(({ name, id }:GenresType) => (
+                    data?.genres.map(({ name, id }: GenresType) => (
                         <Links key={id} to="/">
                             <ListItem
                                 onClick={() =>

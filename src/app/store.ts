@@ -3,10 +3,13 @@ import { tmdbApi } from "../services/TMDB";
 
 import genreOrCateogoryReducer from "../features/currentGenreOrCateograry";
 
+import authReducer from "../features/auth";
+
 const store = configureStore({
     reducer: {
         [tmdbApi.reducerPath]: tmdbApi.reducer,
         currentGenreOrCateogory: genreOrCateogoryReducer,
+        user: authReducer,
     },
 });
 export default store;

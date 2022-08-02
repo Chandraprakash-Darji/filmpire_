@@ -1,10 +1,10 @@
 import { Grow, Rating, Tooltip } from "@mui/material";
-import { MovieType } from "../../types/MoviesType";
+import { MoviesType } from "../../types";
 import { Image, Links, MovieContainer, Title } from "./style";
 
 type MovieProps = {
     i: number;
-    movie: MovieType;
+    movie: MoviesType;
 };
 
 const Movie = ({ movie, i }: MovieProps) => {
@@ -19,6 +19,7 @@ const Movie = ({ movie, i }: MovieProps) => {
                                 : "https://www.fillmurray.com/200/300"
                         }
                         alt={movie.title}
+                        loading="lazy"
                     />
                     <Title variant="h5">{movie.title}</Title>
                     <Tooltip
