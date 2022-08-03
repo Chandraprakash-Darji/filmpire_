@@ -9,7 +9,7 @@ type MovieProps = {
 
 const Movie = ({ movie, i }: MovieProps) => {
     return (
-        <MovieContainer item xs={12} sm={6} md={4} lg={3} xl={2}>
+        <MovieContainer item>
             <Grow in key={i} timeout={250 * (i + 1)}>
                 <Links to={`/movie/${movie.id}`}>
                     <Image

@@ -22,27 +22,7 @@ export type MoviesListType = {
     total_results: number;
 };
 
-export type SingleMovieType = GenresListType & {
-    id: number;
-    title: string;
-    poster_path: string | null;
-    release_date: string;
-    runtime: number | null;
-    vote_average: number;
-    spoken_languages:
-        | {
-              english_name: string;
-              iso_639_1: string;
-              name: string;
-          }[]
-        | null;
-    overview: string | null;
-    tagline: string | null;
-    [key: string]: any;
-};
-
-export type creditsType = {
-    id: number;
+type creditsType = {
     cast: {
         adult: boolean;
         gender: number | null;
@@ -70,4 +50,50 @@ export type creditsType = {
         department: string;
         job: string;
     }[];
+};
+
+export type VideosType = {
+    name: string;
+    site: "YouTube";
+    type: "Trailer";
+    key: string;
+    [key: string]: any;
+};
+
+export type SingleMovieType = GenresListType & {
+    id: number;
+    title: string;
+    poster_path: string | null;
+    release_date: string;
+    runtime: number | null;
+    vote_average: number;
+    spoken_languages:
+        | {
+              english_name: string;
+              iso_639_1: string;
+              name: string;
+          }[]
+        | null;
+    overview: string | null;
+    tagline: string | null;
+    credits: creditsType;
+    videos: { results: VideosType[] };
+    [key: string]: any;
+};
+
+export type returnQueryType<T> = {
+    data: T;
+    isFetching: boolean;
+    error: boolean;
+};
+
+export type actorType = {
+    birthday: string | null;
+    known_for_department: string;
+    id: number;
+    name: string;
+    biography: string;
+    profile_path: "/kU3B75TyRiCgE270EyZnHjfivoq.jpg";
+    imdb_id: "nm0000093";
+    [key: string]: any;
 };

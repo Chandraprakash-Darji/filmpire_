@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { creditsType, GenresListType, SingleMovieType } from "../types";
+import { GenresListType, SingleMovieType } from "../types";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
 import { MoviesListType } from "../types";
@@ -55,11 +55,18 @@ export const tmdbApi: any = createApi({
         //* Get Movie Details
         getMovie: builder.query<SingleMovieType, number>({
             query: (id) =>
-                `/movie/${id}?append_o_response=vidoes,credits&api_key=${tmdbApiKey}`,
+                `/movie/${id}?api_key=${tmdbApiKey}&append_to_response=videos,credits`,
         }),
-        getMovieCast: builder.query<creditsType, number>({
-            query: (id) => `/movie/${id}/credits?api_key=${tmdbApiKey}`,
+        //* Get User Specific MovieList
+        getRecomendations: builder.query<
+            MoviesListType,
+            { movie_id: number; list: number }
+        >({
+            query: ({ movie_id, list }) =>
+                `/movie/${movie_id}/${list}?api_key=${tmdbApiKey}`,
         }),
+        //* Get Actor Data
+        
     }),
 });
 
@@ -67,5 +74,5 @@ export const {
     useGetMoviesQuery,
     useGetGenresQuery,
     useGetMovieQuery,
-    useGetMovieCastQuery,
+    useGetRecomendationsQuery,
 } = tmdbApi;

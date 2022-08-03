@@ -1,4 +1,5 @@
-import { Box, Grid } from "@mui/material";
+import { Height } from "@mui/icons-material";
+import { Box, Grid, Modal } from "@mui/material";
 import { styled } from "@mui/styles";
 import { Link } from "react-router-dom";
 
@@ -75,9 +76,25 @@ export const ButtonContainer = styled("div")(({ theme }) => ({
     display: "flex",
     justifyContent: "space-between",
     width: "100%",
+    flexWrap: "wrap",
+    gap: "20px",
     [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
-        gap: "10px",
         alignIntems: "center",
+        justifyContent: "center",
+    },
+}));
+
+export const StyledModal = styled(Modal)(() => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}));
+export const Video = styled("iframe")(({ theme }) => ({
+    width: "50%",
+    height: "50%",
+    [theme.breakpoints.down("sm")]: {
+        width: "90%",
+        height: "90%",
     },
 }));

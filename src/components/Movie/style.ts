@@ -3,7 +3,7 @@ import { styled } from "@mui/styles";
 import { Link } from "react-router-dom";
 
 export const MovieContainer = styled(Grid)(() => ({
-    padding: "10px",
+    padding: "0",
     display: "flex",
     justifyContent: "center",
 }));

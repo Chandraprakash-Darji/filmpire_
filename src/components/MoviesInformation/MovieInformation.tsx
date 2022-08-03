@@ -21,12 +21,22 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import GenreIconList from "../../assets/genres";
 import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
-import { useGetMovieCastQuery, useGetMovieQuery } from "../../services/TMDB";
-import { SingleMovieType, GenresType, creditsType } from "../../types";
+import {
+    useGetMovieQuery,
+    useGetRecomendationsQuery,
+} from "../../services/TMDB";
+import {
+    SingleMovieType,
+    GenresType,
+    returnQueryType,
+    MoviesListType,
+} from "../../types";
+import MovieList from "../MovieList/MovieList";
 import {
     BoxWrapper,
     ButtonContainer,
@@ -35,48 +45,46 @@ import {
     GenerImage,
     GenresContainer,
     Poster,
+    StyledModal,
+    Video,
 } from "./style";
 
 const MovieInformation = () => {
     const { id } = useParams();
     const isMovieFav = true;
     const isMovieWatchlisted = false;
-    const {
-        data,
-        isFetching,
-        error,
-    }: { data: SingleMovieType; isFetching: boolean; error: boolean } =
+    const [open, setOpen] = useState(false);
+    const { data, isFetching, error }: returnQueryType<SingleMovieType> =
         useGetMovieQuery(id);
-
     const {
-        data: movieCast,
-        isFetching: movieCastIsFetching,
-        error: movieCastError,
-    }: {
-        data: creditsType;
-        isFetching: boolean;
-        error: boolean;
-    } = useGetMovieCastQuery(id);
+        data: recomendations,
+        isFetching: recomendationsIsFetching,
+        error: recomendationsError,
+    }: returnQueryType<MoviesListType> = useGetRecomendationsQuery({
+        movie_id: id,
+        list: "/recommendations",
+    });
 
     const dispatch = useAppDispatch();
 
     const addToFav = () => {};
     const addToWatchList = () => {};
 
-    if (isFetching || movieCastIsFetching)
+    if (isFetching)
         return (
             <BoxWrapper>
                 <CircularProgress size={"4rem"} />
             </BoxWrapper>
         );
 
-    if (error || movieCastError)
+    if (error)
         return (
             <BoxWrapper>
                 <Link to="/">Error Ocurred Try Again later...</Link>
             </BoxWrapper>
         );
-    console.log(data, movieCast);
+    console.log(data);
+    console.log(recomendations);
     return (
         <BoxWrapper>
             <ContainerSpace container>
@@ -151,16 +159,14 @@ const MovieInformation = () => {
                         Top Cast
                     </Typography>
                     <Grid item container spacing={2}>
-                        {movieCast?.cast?.slice(0, 6).map(
+                        {data?.credits?.cast?.slice(0, 6).map(
                             (character, i) =>
                                 character.profile_path && (
                                     <Grid
                                         key={i}
                                         item
-                                        xs={4}
-                                        md={2}
                                         component={Link}
-                                        to={`/person/${character.id}`}
+                                        to={`/actors/${character.id}`}
                                         style={{ textDecoration: "none" }}
                                     >
                                         <CastImage
@@ -179,7 +185,7 @@ const MovieInformation = () => {
                     </Grid>
                     <Grid item container style={{ marginTop: "2rem" }}>
                         <ButtonContainer>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item>
                                 <ButtonGroup size="medium" variant="outlined">
                                     <Button
                                         target="_blank"
@@ -198,7 +204,7 @@ const MovieInformation = () => {
                                         IMDB
                                     </Button>
                                     <Button
-                                        onClick={() => {}}
+                                        onClick={() => setOpen(true)}
                                         href="#"
                                         endIcon={<Theaters />}
                                     >
@@ -206,13 +212,12 @@ const MovieInformation = () => {
                                     </Button>
                                 </ButtonGroup>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item>
                                 <ButtonGroup
                                     size="medium"
                                     variant="outlined"
                                     style={{
                                         display: "flex",
-                                        justifyContent: "flex-end",
                                     }}
                                 >
                                     <Button
@@ -258,6 +263,44 @@ const MovieInformation = () => {
                         </ButtonContainer>
                     </Grid>
                 </Grid>
+                <Box marginTop="5rem" width="100%">
+                    <Typography variant="h3" gutterBottom align="center">
+                        You might also like
+                    </Typography>
+                    {/* Loopp through recomended movies */}
+                    {recomendationsIsFetching && (
+                        <CircularProgress size={"4rem"} />
+                    )}
+                    {recomendationsError && (
+                        <Typography>
+                            Error Ocurred Try Again later...
+                        </Typography>
+                    )}
+                    {recomendations && (
+                        <MovieList
+                            movies={recomendations}
+                            numberOfMovies={12}
+                        />
+                    )}
+                </Box>
+
+                {data?.videos?.results.length > 0 && (
+                    <StyledModal
+                        closeAfterTransition
+                        open={open}
+                        onClose={() => setOpen(false)}
+                    >
+                        <Video
+                            width="560"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
+                    </StyledModal>
+                )}
             </ContainerSpace>
         </BoxWrapper>
     );
