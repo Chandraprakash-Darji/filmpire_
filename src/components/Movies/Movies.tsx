@@ -7,29 +7,23 @@ import {
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetMoviesQuery } from "../../services/TMDB";
-import { MovieList } from "..";
+import { MovieList, Pagination } from "..";
 import { useAppSelector } from "../../app/hooks";
 import { styled } from "@mui/styles";
-
-export const BoxWrapper = styled(Box)(({ theme }) => ({
-    display: "flex",
-    justifyContent: "center",
-    [theme.breakpoints.down("md")]: {
-        marginTop: "3rem",
-    },
-}));
+import { BoxWrapper } from "../styles";
+import { MoviesListType, returnQueryType } from "../../types";
 
 const Movies: React.FC = () => {
     const [page, setPage] = useState(1);
     const { genreIdOrCateogaryName, searchQuery } = useAppSelector(
         (state) => state.currentGenreOrCateogory
     );
-    const { data, error, isFetching } = useGetMoviesQuery({
-        genreIdOrCateogaryName,
-        page,
-        searchQuery,
-    });
-    const isMobile = useMediaQuery("(max-width:900px)");
+    const { data, error, isFetching }: returnQueryType<MoviesListType> =
+        useGetMoviesQuery({
+            genreIdOrCateogaryName,
+            page,
+            searchQuery,
+        });
 
     if (isFetching)
         return (
@@ -57,9 +51,15 @@ const Movies: React.FC = () => {
                 </Typography>
             </BoxWrapper>
         );
+        console.log(data)
     return (
         <BoxWrapper>
             <MovieList movies={data} />
+            <Pagination
+                currentPage={page}
+                setPage={setPage}
+                totalPages={data.total_pages}
+            />
         </BoxWrapper>
     );
 };

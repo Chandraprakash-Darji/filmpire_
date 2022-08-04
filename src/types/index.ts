@@ -87,13 +87,12 @@ export type returnQueryType<T> = {
     error: boolean;
 };
 
-export type actorType = {
+export type ActorType = {
     birthday: string | null;
-    known_for_department: string;
     id: number;
     name: string;
     biography: string;
-    profile_path: "/kU3B75TyRiCgE270EyZnHjfivoq.jpg";
-    imdb_id: "nm0000093";
+    profile_path: string;
+    imdb_id: string;
     [key: string]: any;
 };

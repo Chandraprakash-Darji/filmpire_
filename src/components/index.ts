@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar/Sidebar";
 import MovieList from "./MovieList/MovieList";
 import Movie from "./Movie/Movie";
 import Search from "./Search/Search";
+import Pagination from "./Pagination/Pagination";
 export {
     Actors,
     Movies,
@@ -17,4 +18,5 @@ export {
     MovieList,
     Movie,
     Search,
+    Pagination
 };

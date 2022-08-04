@@ -33,7 +33,7 @@ const cateograies: cateograiesType[] = [
 ];
 
 interface Props {
-    setMobileOpen: React.Dispatch<SetStateAction<boolean>>;
+    setMobileOpen?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const Sidebar = ({ setMobileOpen }: Props) => {
@@ -45,7 +45,11 @@ const Sidebar = ({ setMobileOpen }: Props) => {
     const dispatch = useAppDispatch();
     return (
         <>
-            <ImageLink to="/" className="imageLink">
+            <ImageLink
+                to="/"
+                className="imageLink"
+                onClick={() => setMobileOpen && setMobileOpen(false)}
+            >
                 <Image
                     src={theme.palette.mode === "dark" ? redLogo : blueLogo}
                     alt="Filmpure logo"
@@ -57,9 +61,10 @@ const Sidebar = ({ setMobileOpen }: Props) => {
                 {cateograies.map(({ label, value }: cateograiesType) => (
                     <Links key={value} to="/">
                         <ListItem
-                            onClick={() =>
-                                dispatch(selectGenreOrCateogary(value))
-                            }
+                            onClick={() => {
+                                dispatch(selectGenreOrCateogary(value));
+                                setMobileOpen && setMobileOpen(false);
+                            }}
                             button
                         >
                             <ListItemIcon>
@@ -84,9 +89,10 @@ const Sidebar = ({ setMobileOpen }: Props) => {
                     data?.genres.map(({ name, id }: GenresType) => (
                         <Links key={id} to="/">
                             <ListItem
-                                onClick={() =>
-                                    dispatch(selectGenreOrCateogary(id))
-                                }
+                                onClick={() => {
+                                    dispatch(selectGenreOrCateogary(id));
+                                    setMobileOpen && setMobileOpen(false);
+                                }}
                                 button
                             >
                                 <ListItemIcon>

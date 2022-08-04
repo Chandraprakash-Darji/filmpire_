@@ -127,7 +127,7 @@ const NavBar = () => {
                         </DrawerPaper>
                     ) : (
                         <DrawerPaper variant="permanent">
-                            <Sidebar setMobileOpen={setMobileOpen} />
+                            <Sidebar/>
                         </DrawerPaper>
                     )}
                 </StyledDrawer>

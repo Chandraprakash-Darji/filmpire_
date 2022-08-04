@@ -8,14 +8,14 @@ interface MovieListProps {
     numberOfMovies?: number;
 }
 
-const MovieList: React.FC<MovieListProps> = ({ movies, numberOfMovies }) => {
+const MovieList: React.FC<MovieListProps> = ({ movies, numberOfMovies }) => {   
     return (
         <MoviesContainer container className="moviesContainer">
             {movies &&
                 movies.results
                     .slice(0, numberOfMovies ? numberOfMovies : -1)
                     .map((movie: MoviesType, i: number) => (
-                        <Movie key={i} movie={movie} i={i} />
+                        <Movie key={movie.id} movie={movie} i={i} />
                     ))}
         </MoviesContainer>  
     );

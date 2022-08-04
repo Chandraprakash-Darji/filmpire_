@@ -22,7 +22,7 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import GenreIconList from "../../assets/genres";
 import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
@@ -37,20 +37,21 @@ import {
     MoviesListType,
 } from "../../types";
 import MovieList from "../MovieList/MovieList";
+import { Pagination } from "..";
+import { BoxWrapper, ContainerSpace, Poster } from "../styles";
 import {
-    BoxWrapper,
     ButtonContainer,
     CastImage,
-    ContainerSpace,
     GenerImage,
     GenresContainer,
-    Poster,
     StyledModal,
     Video,
 } from "./style";
 
 const MovieInformation = () => {
     const { id } = useParams();
+    const [page, setPage] = useState(1);
+    const navigate = useNavigate();
     const isMovieFav = true;
     const isMovieWatchlisted = false;
     const [open, setOpen] = useState(false);
@@ -83,8 +84,6 @@ const MovieInformation = () => {
                 <Link to="/">Error Ocurred Try Again later...</Link>
             </BoxWrapper>
         );
-    console.log(data);
-    console.log(recomendations);
     return (
         <BoxWrapper>
             <ContainerSpace container>
@@ -94,7 +93,7 @@ const MovieInformation = () => {
                         alt={data?.title}
                     />
                 </Grid>
-                <Grid item container direction="column" lg={7}>
+                <Grid item container direction="column" lg={6}>
                     <Typography variant="h3" align="center" gutterBottom>
                         {data?.title} ({data.release_date.split("-")[0]})
                     </Typography>
@@ -247,10 +246,9 @@ const MovieInformation = () => {
                                     <Button
                                         endIcon={<ArrowBack />}
                                         sx={{ borderColor: "primary.main" }}
+                                        onClick={() => navigate(-1)}
                                     >
                                         <Typography
-                                            component={Link}
-                                            to="/"
                                             color="inherit"
                                             variant="subtitle2"
                                             style={{ textDecoration: "none" }}
@@ -277,10 +275,17 @@ const MovieInformation = () => {
                         </Typography>
                     )}
                     {recomendations && (
-                        <MovieList
-                            movies={recomendations}
-                            numberOfMovies={12}
-                        />
+                        <>
+                            <MovieList
+                                movies={recomendations}
+                                numberOfMovies={12}
+                            />
+                            <Pagination
+                                currentPage={page}
+                                setPage={setPage}
+                                totalPages={recomendations.total_pages}
+                            />
+                        </>
                     )}
                 </Box>
 

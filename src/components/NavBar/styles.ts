@@ -12,8 +12,8 @@ export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
         marginLeft: "0",
         flexWrap: "wrap",
         height: "auto",
-        gap: "10px",
         paddingBlock: "10px",
+        // rowGap: "25px",
     },
 }));
 
