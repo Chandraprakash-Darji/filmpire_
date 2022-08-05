@@ -7,7 +7,7 @@ import {
     useGetActorMoviesQuery,
     useGetActorDataQuery,
 } from "../../services/TMDB";
-import { ActorType, MoviesListType, returnQueryType } from "../../types";
+import { ActorType, MoviesListType, returnQueryType } from "../types";
 import MovieList from "../MovieList/MovieList";
 import { Pagination } from "..";
 import { BoxWrapper, ContainerSpace, Poster } from "../styles";
@@ -81,13 +81,22 @@ const Actors = () => {
     return (
         <BoxWrapper>
             <ContainerSpace container>
-                <Grid item md={12} lg={5} xl={4} display="flex">
+                <Grid
+                    item
+                    sm={12}
+                    md={4}
+                    style={{
+                        maxWidth: "30rem",
+                        justifyContent: "center",
+                        display: "flex",
+                    }}
+                >
                     <Poster
                         src={`https://image.tmdb.org/t/p/w500${data.profile_path}`}
                         alt={data?.name}
                     />
                 </Grid>
-                <Grid item container direction="column" lg={7} xl={8}>
+                <Grid item container direction="column" md={7}>
                     <Typography variant="h2" gutterBottom>
                         {data?.name}
                     </Typography>

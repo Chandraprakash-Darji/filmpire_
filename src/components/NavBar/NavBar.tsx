@@ -59,7 +59,7 @@ const NavBar = () => {
 
     return (
         <>
-            <AppBar position="fixed">
+            <AppBar position="fixed" style={{ width: "100vw", left: "0" }}>
                 <StyledToolbar>
                     {isMobile && (
                         <MenuButton
@@ -127,7 +127,7 @@ const NavBar = () => {
                         </DrawerPaper>
                     ) : (
                         <DrawerPaper variant="permanent">
-                            <Sidebar/>
+                            <Sidebar />
                         </DrawerPaper>
                     )}
                 </StyledDrawer>

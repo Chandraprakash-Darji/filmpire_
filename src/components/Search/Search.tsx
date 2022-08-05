@@ -3,15 +3,19 @@ import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { InputContainer, SearchContainer } from "./style";
+import { InputContainer, SearchContainer } from "./styles";
 import { SearchMovie } from "../../features/currentGenreOrCateograry";
 
 const Search = () => {
     const [query, setQuery] = useState("");
     const dispatch = useAppDispatch();
+    const location = useLocation();
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") dispatch(SearchMovie(query)); 
+        if (e.key === "Enter") dispatch(SearchMovie(query));
     };
+
+    if (location.pathname !== "/") return null;
+
     return (
         <SearchContainer>
             <InputContainer

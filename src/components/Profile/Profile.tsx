@@ -2,13 +2,42 @@ import { ExitToApp } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
-
+import { useGetListQuery } from "../../services/TMDB";
+import { MoviesListType, returnQueryType } from "../types";
+import { RatedCards } from "..";
 const Profile = () => {
     const { user } = useAppSelector((state) => state.user);
-    const favoriteMovies = [];
+
+    // For Fetching use specific Lists
+    // favoriteList
+
+    const {
+        data: favoriteListMovies,
+        refetch: refetchfavoriteListMovies,
+    }: returnQueryType<MoviesListType> = useGetListQuery({
+        listName: "favorite/movies",
+        accountId: user && user.id,
+        sessionId: localStorage.getItem("session_id"),
+        page: 1,
+    });
+    // Watchlist
+    const {
+        data: watchListMovies,
+        refetch: refetchwatchListMovies,
+    }: returnQueryType<MoviesListType> = useGetListQuery({
+        listName: "watchlist/movies",
+        accountId: user && user.id,
+        sessionId: localStorage.getItem("session_id"),
+        page: 1,
+    });
+
+    useEffect(() => {
+        refetchfavoriteListMovies();
+        refetchwatchListMovies();
+    }, []);
+
     const logout = () => {
         localStorage.clear();
-
         window.location.href = "/";
     };
 
@@ -22,13 +51,23 @@ const Profile = () => {
                     Logout <ExitToApp />
                 </Button>
             </Box>
-            {!favoriteMovies.length ? (
+            {!favoriteListMovies?.results.length &&
+            !watchListMovies?.results.length ? (
                 <Typography variant="h5">
                     {" "}
                     Add favorite or watchlist some movies to see them here!
                 </Typography>
             ) : (
-                <Box>FAVORITE MOVIES</Box>
+                <Box>
+                    <RatedCards
+                        title="Favrite Movies"
+                        data={favoriteListMovies}
+                    />
+                    <RatedCards
+                        title="WatchList Movies"
+                        data={watchListMovies}
+                    />
+                </Box>
             )}
         </Box>
     );

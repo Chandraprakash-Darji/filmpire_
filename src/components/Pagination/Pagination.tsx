@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { StyledButton, Container, PageNumber } from "./style";
+import { StyledButton, Container, PageNumber } from "./styles";
 
 type PaginationProps = {
     currentPage: number;

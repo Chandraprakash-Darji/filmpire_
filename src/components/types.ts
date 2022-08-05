@@ -85,6 +85,7 @@ export type returnQueryType<T> = {
     data: T;
     isFetching: boolean;
     error: boolean;
+    refetch: () => {};
 };
 
 export type ActorType = {

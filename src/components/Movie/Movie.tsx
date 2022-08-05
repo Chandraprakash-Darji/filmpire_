@@ -1,6 +1,6 @@
 import { Grow, Rating, Tooltip } from "@mui/material";
-import { MoviesType } from "../../types";
-import { Image, Links, MovieContainer, Title } from "./style";
+import { MoviesType } from "../types";
+import { Image, Links, MovieContainer, Title } from "./styles";
 
 type MovieProps = {
     i: number;
@@ -26,7 +26,7 @@ const Movie = ({ movie, i }: MovieProps) => {
                         disableTouchListener
                         title={`${movie.vote_average} / 10`}
                     >
-                        <div>
+                        <div style={{ textAlign: "center" }}>
                             <Rating
                                 readOnly
                                 value={movie.vote_average / 2}

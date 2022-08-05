@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ActorType, GenresListType, SingleMovieType } from "../types";
+import { ActorType, GenresListType, SingleMovieType } from "../components/types";
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
-import { MoviesListType } from "../types";
+import { MoviesListType } from "../components/types";
 
 export const tmdbApi: any = createApi({
     reducerPath: "tmdbApi",
@@ -52,6 +52,20 @@ export const tmdbApi: any = createApi({
                 return `movie/popular?page=${page}&api_key=${tmdbApiKey}`;
             },
         }),
+        //* Get user Specific list
+        getList: builder.query<
+            MoviesListType,
+            {
+                listName: string;
+                accountID: string;
+                sessionId: string;
+                page: string;
+            }
+        >({
+            query: ({ listName, accountID, sessionId, page }) =>
+                `/account/${accountID}/${listName}?api_key=${tmdbApiKey}&session_id=${sessionId}&page=${page}`,
+        }),
+
         //* Get Movie Details
         getMovie: builder.query<SingleMovieType, number>({
             query: (id) =>
@@ -83,6 +97,7 @@ export const tmdbApi: any = createApi({
 export const {
     useGetMoviesQuery,
     useGetGenresQuery,
+    useGetListQuery,
     useGetMovieQuery,
     useGetRecomendationsQuery,
     useGetActorDataQuery,

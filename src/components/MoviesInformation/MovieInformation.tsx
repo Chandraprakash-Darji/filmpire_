@@ -21,12 +21,13 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import { useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import GenreIconList from "../../assets/genres";
 import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
 import {
+    useGetListQuery,
     useGetMovieQuery,
     useGetRecomendationsQuery,
 } from "../../services/TMDB";
@@ -35,7 +36,7 @@ import {
     GenresType,
     returnQueryType,
     MoviesListType,
-} from "../../types";
+} from "../types";
 import MovieList from "../MovieList/MovieList";
 import { Pagination } from "..";
 import { BoxWrapper, ContainerSpace, Poster } from "../styles";
@@ -46,17 +47,24 @@ import {
     GenresContainer,
     StyledModal,
     Video,
-} from "./style";
+} from "./styles";
 
 const MovieInformation = () => {
+    const { user } = useAppSelector((state) => state.user);
     const { id } = useParams();
-    const [page, setPage] = useState(1);
     const navigate = useNavigate();
-    const isMovieFav = true;
-    const isMovieWatchlisted = false;
+    // States
+    const [page, setPage] = useState(1);
+    const [isMovieFav, setisMovieFav] = useState<boolean | "0">(false);
+    const [isMovieWatchlisted, setIsMovieWatchlisted] = useState<boolean | "0">(
+        false
+    );
     const [open, setOpen] = useState(false);
+    // Querys
+    // For fetching movie detail
     const { data, isFetching, error }: returnQueryType<SingleMovieType> =
         useGetMovieQuery(id);
+    // For fetching recomendations
     const {
         data: recomendations,
         isFetching: recomendationsIsFetching,
@@ -65,11 +73,75 @@ const MovieInformation = () => {
         movie_id: id,
         list: "/recommendations",
     });
+    // For Fetching use specific Lists
+    // favoriteList
+    const { data: favoriteListMovies }: returnQueryType<MoviesListType> =
+        useGetListQuery({
+            listName: "favorite/movies",
+            accountId: user && user.id,
+            sessionId: localStorage.getItem("session_id"),
+            page: 1,
+        });
+    // Watchlist
+    const { data: watchListMovies }: returnQueryType<MoviesListType> =
+        useGetListQuery({
+            listName: "watchlist/movies",
+            accountId: user && user.id,
+            sessionId: localStorage.getItem("session_id"),
+            page: 1,
+        });
+    useEffect(() => {
+        if (favoriteListMovies)
+            setisMovieFav(
+                !!favoriteListMovies.results.find(
+                    (movie) => movie?.id === data?.id
+                )
+            );
+    }, [favoriteListMovies, data]);
+
+    useEffect(() => {
+        if (watchListMovies)
+            setIsMovieWatchlisted(
+                !!watchListMovies.results.find((movie) => movie?.id === data?.id)
+            );
+    }, [watchListMovies, data]);
 
     const dispatch = useAppDispatch();
 
-    const addToFav = () => {};
-    const addToWatchList = () => {};
+    const addToFav = async () => {
+        const state = isMovieFav;
+        setisMovieFav("0");
+        if (!user) return;
+        await axios.post(
+            `https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${
+                process.env.REACT_APP_TMDB_KEY
+            }&session_id=${localStorage.getItem("session_id")}`,
+            {
+                media_type: "movie",
+                media_id: id,
+                favorite: !isMovieFav,
+            }
+        );
+        setisMovieFav(!state);
+    };
+    const addToWatchList = async () => {
+        const state = isMovieWatchlisted;
+        setIsMovieWatchlisted("0");
+        if (!user) return;
+        await axios.post(
+            `https://api.themoviedb.org/3/account/${
+                user.id
+            }/watchlist?api_key=${
+                process.env.REACT_APP_TMDB_KEY
+            }&session_id=${localStorage.getItem("session_id")}`,
+            {
+                media_type: "movie",
+                media_id: id,
+                watchlist: !isMovieWatchlisted,
+            }
+        );
+        setIsMovieWatchlisted(!state);
+    };
 
     if (isFetching)
         return (
@@ -87,20 +159,30 @@ const MovieInformation = () => {
     return (
         <BoxWrapper>
             <ContainerSpace container>
-                <Grid item md={12} lg={4} display="flex">
+                <Grid
+                    item
+                    sm={12}
+                    md={4}
+                    lg={4}
+                    style={{
+                        maxWidth: "30rem",
+                        justifyContent: "center",
+                        display: "flex",
+                    }}
+                >
                     <Poster
                         src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`}
                         alt={data?.title}
                     />
                 </Grid>
-                <Grid item container direction="column" lg={6}>
+                <Grid item container direction="column" md={6}>
                     <Typography variant="h3" align="center" gutterBottom>
                         {data?.title} ({data.release_date.split("-")[0]})
                     </Typography>
                     <Typography variant="h5" align="center" gutterBottom>
                         {data?.tagline}
                     </Typography>
-                    <ContainerSpace item>
+                    <ContainerSpace item style={{ flexDirection: "column" }}>
                         <Box display="flex" justifyContent="center">
                             <Rating readOnly value={data?.vote_average / 2} />
                             <Typography
@@ -111,12 +193,11 @@ const MovieInformation = () => {
                                 {data?.vote_average} / 10
                             </Typography>
                         </Box>
+
                         <Typography variant="h6" align="center" gutterBottom>
-                            {data?.runtime}min{" "}
+                            {data?.runtime}min /{" "}
                             {data?.spoken_languages &&
-                            data?.spoken_languages.length > 0
-                                ? `/ ${data?.spoken_languages[0].name}`
-                                : ""}
+                                data?.spoken_languages[0].name}
                         </Typography>
                     </ContainerSpace>
                     <GenresContainer item>
@@ -222,26 +303,40 @@ const MovieInformation = () => {
                                     <Button
                                         onClick={addToFav}
                                         endIcon={
-                                            isMovieFav ? (
+                                            isMovieFav === "0" ? (
+                                                <CircularProgress
+                                                    color="inherit"
+                                                    size="20px"
+                                                />
+                                            ) : isMovieFav === true ? (
                                                 <FavoriteBorderOutlined />
                                             ) : (
                                                 <Favorite />
                                             )
                                         }
+                                        disabled={isMovieFav === "0"}
                                     >
-                                        {isMovieFav ? "unfavorite" : "favorite"}
+                                         {isMovieFav === true
+                                            ? "unfavorite"
+                                            : "favorite"}
                                     </Button>
                                     <Button
                                         onClick={addToWatchList}
                                         endIcon={
-                                            isMovieWatchlisted ? (
+                                            isMovieWatchlisted === "0" ? (
+                                                <CircularProgress
+                                                    color="inherit"
+                                                    size="20px"
+                                                />
+                                            ) : isMovieWatchlisted === true ? (
                                                 <Remove />
                                             ) : (
                                                 <PlusOne />
                                             )
                                         }
+                                        disabled={isMovieWatchlisted === "0"}
                                     >
-                                        Watchlist
+                                        watchlist
                                     </Button>
                                     <Button
                                         endIcon={<ArrowBack />}

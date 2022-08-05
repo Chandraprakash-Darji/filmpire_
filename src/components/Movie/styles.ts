@@ -25,6 +25,8 @@ export const Links = styled(Link)(({ theme }) => ({
     [theme.breakpoints.up("sm")]: {
         flexDirection: "column",
         display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     "&:hover": {
         cursor: "pointer",

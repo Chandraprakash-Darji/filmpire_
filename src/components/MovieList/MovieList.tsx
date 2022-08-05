@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { MoviesListType, MoviesType } from "../../types";
+import { MoviesListType, MoviesType } from "../types";
 import { MoviesContainer } from "./styles";
 import { Movie } from "..";
 interface MovieListProps {

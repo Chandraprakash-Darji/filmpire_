@@ -6,7 +6,7 @@ import { createTheme } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { Provider } from "react-redux";
 import store from "./app/store";
-
+import "./index.css"; 
 declare module "@mui/styles/defaultTheme" {
     interface DefaultTheme extends Theme {}
 }
