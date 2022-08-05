@@ -1,8 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { styled } from "@mui/styles";
-import { useLocation } from "react-router-dom";
 
-export const Root = styled("div")(() => ({
+export const Root = styled("div")(({ theme }) => ({
     display: "flex",
     height: "100%",
     overflow: "hidden",
@@ -40,7 +39,7 @@ export const Poster = styled("img")(({ theme }) => ({
     height: "fit-content",
     marginBottom: "30px",
     flexShrink: "0",
-    
+
     [theme.breakpoints.down("md")]: {
         marginInline: "auto",
         width: "50%",
@@ -49,4 +48,3 @@ export const Poster = styled("img")(({ theme }) => ({
         width: "80%",
     },
 }));
-

@@ -37,12 +37,10 @@ interface Props {
 }
 
 const Sidebar = ({ setMobileOpen }: Props) => {
-    const { genreIdOrCateogaryName } = useAppSelector(
-        (state) => state.currentGenreOrCateogory
-    );
     const { data, isFetching } = useGetGenresQuery();
     const theme = useTheme();
     const dispatch = useAppDispatch();
+    console.log(theme.palette.mode, theme);
     return (
         <>
             <ImageLink

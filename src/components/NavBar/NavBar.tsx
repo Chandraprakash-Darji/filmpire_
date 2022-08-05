@@ -21,11 +21,12 @@ import {
     StyledToolbar,
 } from "./styles";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Sidebar, Search } from "..";
 import { fetchToken, createSessionId, moviesApi } from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setUser } from "../../features/auth";
+import { ColorModeContext } from "../../utils/ToggleColorMode";
 
 const NavBar = () => {
     const { isAuth, user } = useAppSelector((state) => state.user);
@@ -36,6 +37,8 @@ const NavBar = () => {
     const sessionIdLS = localStorage.getItem("session_id");
 
     const dispatch = useAppDispatch();
+
+    const colorMode = useContext(ColorModeContext);
 
     useEffect(() => {
         const logInUser = async () => {
@@ -74,7 +77,7 @@ const NavBar = () => {
                     <IconButton
                         color="inherit"
                         sx={{ ml: 1 }}
-                        onClick={() => {}}
+                        onClick={colorMode.toggleColorMode}
                     >
                         {theme.palette.mode === "dark" ? (
                             <Brightness7 />

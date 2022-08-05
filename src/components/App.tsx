@@ -7,7 +7,6 @@ import { Content, Root, ToolBar } from "./styles";
 const App = () => {
     return (
         <Root>
-            <CssBaseline />
             <NavBar />
             <Content>
                 <ToolBar />

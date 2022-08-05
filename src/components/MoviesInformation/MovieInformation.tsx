@@ -102,7 +102,9 @@ const MovieInformation = () => {
     useEffect(() => {
         if (watchListMovies)
             setIsMovieWatchlisted(
-                !!watchListMovies.results.find((movie) => movie?.id === data?.id)
+                !!watchListMovies.results.find(
+                    (movie) => movie?.id === data?.id
+                )
             );
     }, [watchListMovies, data]);
 
@@ -316,7 +318,7 @@ const MovieInformation = () => {
                                         }
                                         disabled={isMovieFav === "0"}
                                     >
-                                         {isMovieFav === true
+                                        {isMovieFav === true
                                             ? "unfavorite"
                                             : "favorite"}
                                     </Button>
