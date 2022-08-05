@@ -1,5 +1,10 @@
 import { useState, useMemo, createContext, ReactElement } from "react";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import {
+    ThemeProvider,
+    createTheme,
+    CssBaseline,
+    useMediaQuery,
+} from "@mui/material";
 import { Theme } from "@mui/system";
 
 declare module "@mui/styles" {
@@ -12,11 +17,25 @@ export const ColorModeContext = createContext<{
 }>({ mode: "dark", toggleColorMode: () => {} });
 
 const ToggleColorMode = ({ children }: { children: ReactElement }) => {
-    const [mode, setMode] = useState<"light" | "dark">("light");
+    const preferTheme = useMediaQuery("(prefers-color-scheme: dark)")
+        ? "dark"
+        : "light";
 
-    const toggleColorMode = () =>
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+    const storageTheme = localStorage.getItem("colorMode");
+    const defaultMode =
+        storageTheme === "dark" || storageTheme === "light"
+            ? storageTheme
+            : preferTheme;
 
+    const [mode, setMode] = useState<"light" | "dark">(defaultMode);
+
+    const toggleColorMode = () => {
+        setMode((prevMode) => {
+            const m = prevMode === "light" ? "dark" : "light";
+            localStorage.setItem("colorMode", m);
+            return m;
+        });
+    };
     const theme = useMemo(
         () =>
             createTheme({
