@@ -1,42 +1,52 @@
-import { createTheme, CssBaseline, Theme } from "@mui/material";
-import { ThemeProvider } from "@mui/styles";
-import { createContext, ReactElement, useMemo, useState } from "react";
+import { useState, useMemo, createContext, ReactElement } from "react";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { Theme } from "@mui/system";
 
-declare module "@mui/styles/defaultTheme" {
+declare module "@mui/styles" {
     interface DefaultTheme extends Theme {}
 }
 
-interface ColorModeContextProps {
+export const ColorModeContext = createContext<{
     mode: "light" | "dark";
     toggleColorMode: () => void;
-}
-
-export const ColorModeContext = createContext<ColorModeContextProps>({
-    mode: "dark",
-    toggleColorMode: () => {},
-});
+}>({ mode: "dark", toggleColorMode: () => {} });
 
 const ToggleColorMode = ({ children }: { children: ReactElement }) => {
     const [mode, setMode] = useState<"light" | "dark">("light");
 
-    const toggleColorMode = () => {
-        setMode((prev) => (prev === "light" ? "dark" : "light"));
-    };
+    const toggleColorMode = () =>
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+
     const theme = useMemo(
         () =>
             createTheme({
                 palette: {
                     mode,
+                    ...(mode === "dark"
+                        ? {
+                              primary: {
+                                  main: "#00ff00",
+                              },
+                              divider: "#00ff0040",
+                          }
+                        : {}),
+                    ...(mode === "light"
+                        ? {
+                              primary: {
+                                  main: "#9c27b0",
+                              },
+                              divider: "#9c27b040",
+                          }
+                        : {}),
                 },
             }),
         [mode]
     );
+
     return (
         <ColorModeContext.Provider value={{ mode, toggleColorMode }}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {children}
-            </ThemeProvider>
+            <CssBaseline />
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </ColorModeContext.Provider>
     );
 };

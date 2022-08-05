@@ -16,7 +16,7 @@ const Movie = ({ movie, i }: MovieProps) => {
                         src={
                             movie.poster_path
                                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                : "https://www.fillmurray.com/200/300"
+                                : "https://dummyimage.com/200x300/fff/aaa"
                         }
                         alt={movie.title}
                         loading="lazy"

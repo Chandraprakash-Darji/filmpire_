@@ -1,5 +1,5 @@
 import { ExitToApp } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { useGetListQuery } from "../../services/TMDB";
@@ -40,9 +40,10 @@ const Profile = () => {
         localStorage.clear();
         window.location.href = "/";
     };
-
+    const theme = useTheme();
+    console.log(user)
     return (
-        <Box ml="2rem">
+        <Box ml="2rem" style={{ color: theme.palette.text.primary }}>
             <Box display="flex" justifyContent="space-between">
                 <Typography variant="h4" gutterBottom>
                     My Profile

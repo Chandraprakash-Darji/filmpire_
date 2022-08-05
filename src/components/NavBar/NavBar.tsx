@@ -62,7 +62,11 @@ const NavBar = () => {
 
     return (
         <>
-            <AppBar position="fixed" style={{ width: "100vw", left: "0" }}>
+            <AppBar
+                position="fixed"
+                style={{ width: "100vw", left: "0" }}
+                color="primary"
+            >
                 <StyledToolbar>
                     {isMobile && (
                         <MenuButton
@@ -103,7 +107,8 @@ const NavBar = () => {
                                     style={{
                                         width: "30px",
                                         height: "30px",
-                                        backgroundColor: "#123456",
+                                        backgroundColor:
+                                            theme.palette.primary.dark,
                                     }}
                                     alt={user?.username}
                                     src={""}

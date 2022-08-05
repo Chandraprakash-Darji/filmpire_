@@ -96,7 +96,13 @@ const Actors = () => {
                         alt={data?.name}
                     />
                 </Grid>
-                <Grid item container direction="column" md={7}>
+                <Grid
+                    item
+                    container
+                    direction="column"
+                    md={7}
+                    style={{ alignSelf: "center" }}
+                >
                     <Typography variant="h2" gutterBottom>
                         {data?.name}
                     </Typography>

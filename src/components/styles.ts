@@ -4,7 +4,9 @@ import { styled } from "@mui/styles";
 export const Root = styled("div")(({ theme }) => ({
     display: "flex",
     height: "100%",
+    minHeight:'100vh',
     overflow: "hidden",
+    backgroundColor: theme.palette.background.default,
 }));
 export const ToolBar = styled("div")(() => ({
     height: "70px",
@@ -20,6 +22,8 @@ export const BoxWrapper = styled(Box)(({ theme }) => ({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
+    color: theme.palette.text.primary,
+    height: "100%",
 }));
 // Wrapping the Movie and Actor Component
 export const ContainerSpace = styled(Grid)(({ theme }) => ({

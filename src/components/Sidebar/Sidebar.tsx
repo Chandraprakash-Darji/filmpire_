@@ -16,9 +16,9 @@ import genreIcons from "../../assets/genres/index";
 import { selectGenreOrCateogary } from "../../features/currentGenreOrCateograry";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { GenresType } from "../types";
-const redLogo =
-    "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
 const blueLogo =
+    "https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png";
+const redLogo =
     "https://fontmeme.com/permalink/210930/6854ae5c7f76597cf8680e48a2c8a50a.png";
 
 type cateograiesType = {
@@ -40,7 +40,6 @@ const Sidebar = ({ setMobileOpen }: Props) => {
     const { data, isFetching } = useGetGenresQuery();
     const theme = useTheme();
     const dispatch = useAppDispatch();
-    console.log(theme.palette.mode, theme);
     return (
         <>
             <ImageLink
